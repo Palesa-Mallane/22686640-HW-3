@@ -4,13 +4,13 @@
     ViewBag.Title = "ReportView";
 }
 
-<div>
-    <h3 style="color: #E4007C;">Popular Books Report</h3> <!-- Forest Green -->
+<div style="background: linear-gradient(to right, #ffccff, #e6e6fa); padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);">
+    <h3 style="color: #E4007C; font-family: 'Arial', sans-serif; text-shadow: 1px 1px 2px #fff;">📚 Popular Books Report</h3>
     <canvas id="popularBooksChart" width="400" height="200"></canvas>
 </div>
 
-<h5 style="color: #005c32;">Download or Save New Report</h5> <!-- Forest Green -->
-<div>
+<h5 style="color: #E4007C; font-family: 'Arial', sans-serif; margin-top:15px">💾 Download or Save New Report</h5>
+<div style="padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);">
     <form id="downloadReportForm">
         <div style="flex: 1; margin: 0 10px;">
             @Html.Label("File Name", new { @style = "font-weight: bold;" })
@@ -26,24 +26,22 @@
 
             <div style="display: block; margin-bottom: 10px;">
                 @Html.Label("Description", new { @style = "font-weight: bold; display: block; margin-bottom: 5px;" })
-                <textarea id="description" name="Description" style="resize: both; width: 100%; height: 150px;"></textarea>
+                <textarea id="description" name="Description" style="resize: both; width: 100%; height: 150px; border-radius: 5px;"></textarea>
             </div>
-
         </div>
 
         <div style="display: flex; justify-content: center; margin-top: 20px;">
-            <button type="button" id="exportChartButton" style="background-color: #E4007C; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
-                Save Report
+            <button type="button" id="exportChartButton" style="background: linear-gradient(to right, #E4007C, #B10060); color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; transition: background 0.3s;">
+                💾 Save Report
             </button>
         </div>
     </form>
 </div>
 
-<h5 style="color: #E4007C;">Saved Reports</h5> <!-- Forest Green -->
+<h5 style="color: #E4007C; font-family: 'Arial', sans-serif; margin-top:15px ">📂 Saved Reports</h5>
 <div>
-    <table class="table table-bordered"
-           style="border-radius: 10px; overflow: hidden;">
-        <thead style="background-color: #E4007C; color: white;">
+    <table class="table table-bordered" style="border-radius: 10px; overflow: hidden;">
+        <thead style="background-color: #E4007C; color: white; text-align: center;">
             <tr>
                 <th style="padding: 10px;">File Name</th>
                 <th style="padding: 10px;">Description</th>
@@ -57,36 +55,34 @@
             {
                 foreach (var report in Model.reports)
                 {
-                    <tr style="border-bottom: 1px solid #005c32;">
-
+                    <tr style="border-bottom: 1px solid #005c32; text-align: center;">
                         <td style="padding: 10px;">@report.FileName</td>
                         <td style="padding: 10px;">@report.Description</td>
                         <td style="padding: 10px;">@report.FileType</td>
                         <td style="padding: 10px;">@report.DateCreated.ToString("d")</td>
-                        <td>
                         <td style="padding: 10px;">
                             <!-- Download Button -->
-                            <button class="btn btn-sm download-report" style="background-color: #B10060; color: white; border-radius: 5px;" data-filetype="@report.FileType" data-filename="@report.FileName">
-                                Download
+                            <button class="btn btn-sm download-report" style="background: linear-gradient(to right, #B10060, #E4007C); color: white; border-radius: 5px; transition: background 0.3s;" data-filetype="@report.FileType" data-filename="@report.FileName">
+                                📥 Download
                             </button>
                             <!-- Delete Button -->
-                            <button class="btn btn-sm delete-report" sstyle="background-color: #E4007C; color: white; border-radius: 5px;" data-reportid="@report.reportId">
-                                Delete
+                            <button class="btn btn-sm delete-report" style="background: linear-gradient(to right, #E4007C, #B10060); color: white; border-radius: 5px; transition: background 0.3s;" data-reportid="@report.reportId">
+                                ❌ Delete
                             </button>
                         </td>
-                        
                     </tr>
                 }
             }
             else
             {
                 <tr>
-                    <td colspan="3" style="text-align: center; padding: 10px;">No reports saved yet.</td>
+                    <td colspan="5" style="text-align: center; padding: 10px;">📁 No reports saved yet.</td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -113,21 +109,21 @@
 
     // Define different shades of pink for each bar
     const colors = [
-        'rgba(255, 182, 193, 1)',  
-        'rgba(255, 105, 180, 1)',  
-        'rgba(255, 20, 147, 1)',   
+        'rgba(255, 182, 193, 1)',
+        'rgba(255, 105, 180, 1)',
+        'rgba(255, 20, 147, 1)',
         'rgba(219, 112, 147, 1)',
         'rgba(255, 192, 203, 1)',
-        'rgba(255, 0, 255, 1)',    
-        'rgba(255, 128, 255, 1)',  
-        'rgba(255, 160, 122, 1)',  
-        'rgba(255, 99, 71, 1)',    
-        'rgba(220, 20, 60, 1)',     
-        'rgba(255, 105, 180, 0.5)', 
-        'rgba(255, 182, 193, 0.5)', 
-        'rgba(255, 127, 80, 1)',   
+        'rgba(255, 0, 255, 1)',
+        'rgba(255, 128, 255, 1)',
+        'rgba(255, 160, 122, 1)',
+        'rgba(255, 99, 71, 1)',
+        'rgba(220, 20, 60, 1)',
+        'rgba(255, 105, 180, 0.5)',
+        'rgba(255, 182, 193, 0.5)',
+        'rgba(255, 127, 80, 1)',
         'rgba(255, 99, 71, 0.5)',
-        'rgba(220, 20, 60, 0.5)'    
+        'rgba(220, 20, 60, 0.5)'
     ];
 
     if (popularBooksData && popularBooksData.length > 0) {
@@ -301,7 +297,7 @@
                 $('#savedReportsBody').html('<tr><td colspan="5" style="text-align: center; padding: 10px;">No reports saved yet.</td></tr>');
             }
         });
-    
+
 
     } else {
         console.warn("No popular books data available.");

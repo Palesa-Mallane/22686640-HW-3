@@ -8,12 +8,33 @@
     ViewBag.Title = "Maintain";
 }
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f8f9fa;
+    }
+
+    h3 {
+        font-weight: 600;
+    }
+
+    table {
+        border-radius: 10px;
+        overflow: hidden;
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<h1 class="text-center" style="color: #d5006d;">🛠️ Maintain Library Records 🛠️</h1>
+
 <div class="row">
     <div class="col-md-8">
         <p>
-            <h3 style="color: #d5006d;">Authors</h3>
+            <h3 style="color: #d5006d;">🧑‍🏫 Authors</h3>
             <a href="#" data-url="@Url.Action("Create", "authors")" class="create-link btn btn-sm"
-               style="background-color: #FF7EC4; color: white; border-radius: 5px;">Create New Author</a>
+               style="background-color: #FF7EC4; color: white; border-radius: 5px;">➕ Create New Author</a>
         </p>
         <table class="table table-bordered"
                style="border-radius: 10px; overflow: hidden;">
@@ -62,7 +83,7 @@
         </table>
         <div>
             <!-- Pagination for Authors Table -->
-            
+
             <ul class="pagination pagination-sm">
                 @if (!Model.authors.IsFirstPage)
                 {
@@ -76,7 +97,7 @@
                     if (Model.authors.PageNumber > 1)
                     {
                         <li class="page-item">
-                            <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = 1, typesPage = Model.types.PageNumber, borrowsPage = Model.borrows.PageNumber })"style="color: #E4007C;">1</a>
+                            <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = 1, typesPage = Model.types.PageNumber, borrowsPage = Model.borrows.PageNumber })" style="color: #E4007C;">1</a>
                         </li>
                     }
 
@@ -101,7 +122,7 @@
                         else
                         {
                             <li class="page-item">
-                                <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = i, typesPage = Model.types.PageNumber, borrowsPage = Model.borrows.PageNumber })"style="color: #E4007C;">@i</a>
+                                <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = i, typesPage = Model.types.PageNumber, borrowsPage = Model.borrows.PageNumber })" style="color: #E4007C;">@i</a>
                             </li>
                         }
                     }
@@ -109,14 +130,14 @@
                     // Display an ellipsis if there are pages after the current range
                     if (Model.authors.PageNumber < Model.authors.PageCount - 2)
                     {
-                        <li class="page-item"style="color: #E4007C;"><span class="page-link">...</span></li>
+                        <li class="page-item" style="color: #E4007C;"><span class="page-link">...</span></li>
                     }
 
                     // Display the last page
                     if (Model.authors.PageNumber < Model.authors.PageCount)
                     {
                         <li class="page-item">
-                            <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageCount, typesPage = Model.types.PageNumber, borrowsPage = Model.borrows.PageNumber })"style="color: #E4007C;">@Model.authors.PageCount</a>
+                            <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageCount, typesPage = Model.types.PageNumber, borrowsPage = Model.borrows.PageNumber })" style="color: #E4007C;">@Model.authors.PageCount</a>
                         </li>
                     }
                 }
@@ -124,7 +145,7 @@
                 @if (!Model.authors.IsLastPage)
                 {
                     <li class="page-item">
-                        <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber + 1, typesPage = Model.types.PageNumber, borrowsPage = Model.borrows.PageNumber })"style="color: #E4007C;">Next</a>
+                        <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber + 1, typesPage = Model.types.PageNumber, borrowsPage = Model.borrows.PageNumber })" style="color: #E4007C;">Next</a>
                     </li>
                 }
             </ul>
@@ -133,9 +154,9 @@
 
     <div class="col-md-4">
         <p>
-            <h3 style="color: #d5006d;">Book Types</h3>
+            <h3 style="color: #d5006d;">📖 Book Types</h3>
             <a href="#" data-url="@Url.Action("Create", "types")" class="create-link btn btn-sm"
-               style="background-color: #FF7EC4; color: white; border-radius: 5px;">Create New Type</a>
+               style="background-color: #FF7EC4; color: white; border-radius: 5px;">➕ Create New Type</a>
         </p>
         <table class="table table-bordered"
                style="border-radius: 10px; overflow: hidden; color: #4B0029;">
@@ -166,7 +187,7 @@
             @if (!Model.types.IsFirstPage)
             {
                 <li class="page-item">
-                    <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber, typesPage = Model.types.PageNumber - 1, borrowsPage = Model.borrows.PageNumber })"style="color: #E4007C;">Prev</a>
+                    <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber, typesPage = Model.types.PageNumber - 1, borrowsPage = Model.borrows.PageNumber })" style="color: #E4007C;">Prev</a>
                 </li>
             }
 
@@ -175,7 +196,7 @@
                 if (Model.types.PageNumber > 1)
                 {
                     <li class="page-item">
-                        <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber, typesPage = 1, borrowsPage = Model.borrows.PageNumber })"style="color: #E4007C;">1</a>
+                        <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber, typesPage = 1, borrowsPage = Model.borrows.PageNumber })" style="color: #E4007C;">1</a>
                     </li>
                 }
 
@@ -200,7 +221,7 @@
                     else
                     {
                         <li class="page-item">
-                            <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber, typesPage = i, borrowsPage = Model.borrows.PageNumber })"style="color: #E4007C;">@i</a>
+                            <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber, typesPage = i, borrowsPage = Model.borrows.PageNumber })" style="color: #E4007C;">@i</a>
                         </li>
                     }
                 }
@@ -215,7 +236,7 @@
                 if (Model.types.PageNumber < Model.types.PageCount)
                 {
                     <li class="page-item">
-                        <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber, typesPage = Model.types.PageCount, borrowsPage = Model.borrows.PageNumber })"style="color: #E4007C;">@Model.types.PageCount</a>
+                        <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber, typesPage = Model.types.PageCount, borrowsPage = Model.borrows.PageNumber })" style="color: #E4007C;">@Model.types.PageCount</a>
                     </li>
                 }
             }
@@ -223,18 +244,18 @@
             @if (!Model.types.IsLastPage)
             {
                 <li class="page-item">
-                    <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber, typesPage = Model.types.PageNumber + 1, borrowsPage = Model.borrows.PageNumber })"style="color: #E4007C;">Next</a>
+                    <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber, typesPage = Model.types.PageNumber + 1, borrowsPage = Model.borrows.PageNumber })" style="color: #E4007C;">Next</a>
                 </li>
             }
         </ul>
     </div>
 </div>
 <div class="row">
-  
+
     <p>
-        <h3 style="color: #d5006d;">Borrowed Books</h3>
+        <h3 style="color: #d5006d;">📚 Borrowed Books</h3>
         <a href="#" data-url="@Url.Action("Create", "borrows")" class="create-link btn btn-sm"
-           style="background-color: #FF7EC4; color: white; border-radius: 5px;">Create Borrow</a>
+           style="background-color: #FF7EC4; color: white; border-radius: 5px;">➕ Create Borrow</a>
     </p>
     <table class="table table-bordered"
            style="border-radius: 10px; overflow: hidden; color: #4B0029;">
@@ -266,7 +287,7 @@
                            style="background-color: #E4007C; color: white; border-radius: 5px;">Delete</a>
                     </td>
                 </tr>
-             }
+            }
         </tbody>
     </table>
     <ul class="pagination pagination-sm" style="margin-top: 20px; justify-content: center;">
@@ -328,11 +349,11 @@
         }
 
         @if (!Model.borrows.IsLastPage)
-         {
+        {
             <li class="page-item">
                 <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber, typesPage = Model.types.PageNumber, borrowsPage = Model.borrows.PageNumber + 1 })" style="color: #E4007C;">Next</a>
             </li>
-         }
+        }
     </ul>
 </div>
 
