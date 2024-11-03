@@ -1,0 +1,314 @@
+﻿@model _22686640_Homework_Assignment_3.Models.CombinedViewModel
+@using Newtonsoft.Json;
+@{
+    ViewBag.Title = "ReportView";
+}
+
+<div>
+    <h3 style="color: #E4007C;">Popular Books Report</h3> <!-- Forest Green -->
+    <canvas id="popularBooksChart" width="400" height="200"></canvas>
+</div>
+
+<h5 style="color: #005c32;">Download or Save New Report</h5> <!-- Forest Green -->
+<div>
+    <form id="downloadReportForm">
+        <div style="flex: 1; margin: 0 10px;">
+            @Html.Label("File Name", new { @style = "font-weight: bold;" })
+            @Html.TextBox("FileName", "", new { @class = "form-control" })
+
+            @Html.Label("File Type", new { @style = "font-weight: bold;" })
+            @Html.DropDownList("FileType", new List<SelectListItem>
+            {
+                new SelectListItem { Text = "PDF", Value = "PDF" },
+                new SelectListItem { Text = "CSV", Value = "CSV" },
+                new SelectListItem { Text = "Excel", Value = "Excel" }
+            }, new { @class = "form-control", @id = "fileType" })
+
+            <div style="display: block; margin-bottom: 10px;">
+                @Html.Label("Description", new { @style = "font-weight: bold; display: block; margin-bottom: 5px;" })
+                <textarea id="description" name="Description" style="resize: both; width: 100%; height: 150px;"></textarea>
+            </div>
+
+        </div>
+
+        <div style="display: flex; justify-content: center; margin-top: 20px;">
+            <button type="button" id="exportChartButton" style="background-color: #E4007C; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+                Save Report
+            </button>
+        </div>
+    </form>
+</div>
+
+<h5 style="color: #E4007C;">Saved Reports</h5> <!-- Forest Green -->
+<div>
+    <table class="table table-bordered"
+           style="border-radius: 10px; overflow: hidden;">
+        <thead style="background-color: #E4007C; color: white;">
+            <tr>
+                <th style="padding: 10px;">File Name</th>
+                <th style="padding: 10px;">Description</th>
+                <th style="padding: 10px;">File Type</th>
+                <th style="padding: 10px;">Date Created</th>
+                <th style="padding: 10px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="savedReportsBody">
+            @if (Model.reports != null && Model.reports.Any())
+            {
+                foreach (var report in Model.reports)
+                {
+                    <tr style="border-bottom: 1px solid #005c32;">
+
+                        <td style="padding: 10px;">@report.FileName</td>
+                        <td style="padding: 10px;">@report.Description</td>
+                        <td style="padding: 10px;">@report.FileType</td>
+                        <td style="padding: 10px;">@report.DateCreated.ToString("d")</td>
+                        <td>
+                        <td style="padding: 10px;">
+                            <!-- Download Button -->
+                            <button class="btn btn-sm download-report" style="background-color: #B10060; color: white; border-radius: 5px;" data-filetype="@report.FileType" data-filename="@report.FileName">
+                                Download
+                            </button>
+                            <!-- Delete Button -->
+                            <button class="btn btn-sm delete-report" sstyle="background-color: #E4007C; color: white; border-radius: 5px;" data-reportid="@report.reportId">
+                                Delete
+                            </button>
+                        </td>
+                        
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3" style="text-align: center; padding: 10px;">No reports saved yet.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
+<script src="https://cdn.tiny.cloud/1/gp3b52u4e469ojpjiyjt6k3e0akdxqwxs7bzd54myrcehzvx/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    // Initialize TinyMCE with resizable functionality
+    tinymce.init({
+        selector: '#description',
+        plugins: 'autoresize',
+        toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | outdent indent',
+        menubar: false,
+        autoresize_bottom_margin: 20,
+        inline: false, // Ensure that the editor is not inline
+        resize: true, // Enable resizing
+    });
+
+    // Retrieve and log popular books data
+    const popularBooksData = @Html.Raw(Json.Encode(Model.popularBooks));
+    console.log("Top 15 Popular Books Data:", popularBooksData);
+
+    // Define different shades of pink for each bar
+    const colors = [
+        'rgba(255, 182, 193, 1)',  
+        'rgba(255, 105, 180, 1)',  
+        'rgba(255, 20, 147, 1)',   
+        'rgba(219, 112, 147, 1)',
+        'rgba(255, 192, 203, 1)',
+        'rgba(255, 0, 255, 1)',    
+        'rgba(255, 128, 255, 1)',  
+        'rgba(255, 160, 122, 1)',  
+        'rgba(255, 99, 71, 1)',    
+        'rgba(220, 20, 60, 1)',     
+        'rgba(255, 105, 180, 0.5)', 
+        'rgba(255, 182, 193, 0.5)', 
+        'rgba(255, 127, 80, 1)',   
+        'rgba(255, 99, 71, 0.5)',
+        'rgba(220, 20, 60, 0.5)'    
+    ];
+
+    if (popularBooksData && popularBooksData.length > 0) {
+        const bookNames = popularBooksData.map(book => book.BookName);
+        const borrowCounts = popularBooksData.map(book => book.BorrowCount);
+
+        const ctx = document.getElementById('popularBooksChart').getContext('2d');
+        const popularBooksChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: bookNames,
+                datasets: [{
+                    data: borrowCounts,
+                    backgroundColor: colors.slice(0, 10),
+                    borderColor: colors.slice(0, 10).map(color => color.replace('0.8', '1')),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 5
+                        },
+                        title: {
+                            display: true,
+                            text: 'Number of Times Borrowed'
+                        }
+                    }
+                },
+                plugins: {
+
+                    title: {
+                        display: false // Hides the chart title
+                    },
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    // Download report button logic
+        $('#exportChartButton').click(function () {
+            const fileType = $('#fileType').val();
+            const fileName = $('input[name="FileName"]').val() || 'report'; // Updated selector to get File Name
+            const description = $('#description').val();
+
+            console.log(description);
+
+
+            // Download logic for each file type
+            if (fileType === 'PDF') {
+                const docDefinition = {
+                    content: [
+                        { text: 'Popular Books Report', style: 'header' },
+                        {
+                            image: ctx.canvas.toDataURL('image/png'),
+                            width: 500 // Set image width
+                        },
+                        {
+                            table: {
+                                body: [
+                                    [{ text: 'Book Name', bold: true }, { text: 'Borrow Count', bold: true }],
+                                    ...bookNames.map((name, index) => [name, borrowCounts[index]])
+                                ]
+                            }
+                        }
+                    ],
+                    styles: {
+                        header: {
+                            fontSize: 20,
+                            bold: true,
+                            margin: [0, 0, 0, 10]
+                        }
+                    }
+                };
+                pdfMake.createPdf(docDefinition).download(`${fileName}.pdf`);
+            } else if (fileType === 'CSV') {
+                const csvData = [['Book Name', 'Borrow Count'], ...bookNames.map((name, index) => [name, borrowCounts[index]])];
+                const csv = Papa.unparse(csvData);
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.setAttribute('download', `${fileName}.csv`);
+                link.click();
+            } else if (fileType === 'Excel') {
+                const ws = XLSX.utils.json_to_sheet(popularBooksData.map(book => ({ 'Book Name': book.BookName, 'Borrow Count': book.BorrowCount })));
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Popular Books');
+                XLSX.writeFile(wb, `${fileName}.xlsx`);
+            }
+            $('#savedReportsBody').find('tr:contains("No reports saved yet")').remove();
+
+            // Add the report to the table with the description and buttons
+            const dateCreated = new Date().toLocaleDateString(); // Format: MM/DD/YYYY
+            const newRow = `
+            <tr style="border-bottom: 1px solid #005c32;">
+                <td style="padding: 10px;">${fileName}</td>
+                <td style="padding: 10px;">${description}</td>
+                <td style="padding: 10px;">${fileType}</td>
+                <td style="padding: 10px;">${dateCreated}</td>
+                <td style="padding: 10px;">
+                    <button class="btn btn-primary btn-sm download-report" data-filetype="${fileType}" data-filename="${fileName}">Download</button>
+                    <button class="btn btn-danger btn-sm delete-report">Delete</button>
+                </td>
+            </tr>`;
+            $('#savedReportsBody').append(newRow);
+        });
+
+        // Download Report
+        // Download Report
+        $('#savedReportsBody').on('click', '.download-report', function () {
+            const fileType = $(this).data('filetype');
+            const fileName = $(this).data('filename');
+
+            // Retrieve the chart context and data again for download
+            const ctx = document.getElementById('popularBooksChart').getContext('2d');
+            const bookNames = popularBooksData.map(book => book.BookName);
+            const borrowCounts = popularBooksData.map(book => book.BorrowCount);
+
+            if (fileType === 'PDF') {
+                const docDefinition = {
+                    content: [
+                        { text: 'Popular Books Report', style: 'header' },
+                        {
+                            image: ctx.canvas.toDataURL('image/png'),
+                            width: 500
+                        },
+                        {
+                            table: {
+                                body: [
+                                    [{ text: 'Book Name', bold: true }, { text: 'Borrow Count', bold: true }],
+                                    ...bookNames.map((name, index) => [name, borrowCounts[index]])
+                                ]
+                            }
+                        }
+                    ],
+                    styles: {
+                        header: {
+                            fontSize: 20,
+                            bold: true,
+                            margin: [0, 0, 0, 10]
+                        }
+                    }
+                };
+                pdfMake.createPdf(docDefinition).download(`${fileName}.pdf`);
+            } else if (fileType === 'CSV') {
+                const csvData = [['Book Name', 'Borrow Count'], ...bookNames.map((name, index) => [name, borrowCounts[index]])];
+                const csv = Papa.unparse(csvData);
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.setAttribute('download', `${fileName}.csv`);
+                link.click();
+            } else if (fileType === 'Excel') {
+                const ws = XLSX.utils.json_to_sheet(popularBooksData.map(book => ({ 'Book Name': book.BookName, 'Borrow Count': book.BorrowCount })));
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Popular Books');
+                XLSX.writeFile(wb, `${fileName}.xlsx`);
+            }
+        });
+
+
+        // Delete Report
+        $('#savedReportsBody').on('click', '.delete-report', function () {
+            $(this).closest('tr').remove();
+
+            // Check if the table is empty after deletion
+            if ($('#savedReportsBody').children('tr').length === 0) {
+                $('#savedReportsBody').html('<tr><td colspan="5" style="text-align: center; padding: 10px;">No reports saved yet.</td></tr>');
+            }
+        });
+    
+
+    } else {
+        console.warn("No popular books data available.");
+    }
+</script>
+
+
+
+
+

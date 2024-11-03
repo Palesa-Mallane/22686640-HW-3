@@ -1,0 +1,70 @@
+﻿@model _22686640_Homework_Assignment_3.Models.book
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2 style="color: #d5006d;">Create Book</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal" style="border: 1px solid #d5006d; padding: 20px; border-radius: 10px; background-color: #ffffff;">
+        <h4 style="color: #d5006d;">Book</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <!-- Name Field -->
+    <div class="form-group">
+        @Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control", style = "border: 2px solid #d5006d;" } })
+            @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+        <!-- Page Count Field -->
+        <div class="form-group">
+            @Html.Label("Page Count", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.pagecount, new { htmlAttributes = new { @class = "form-control", style = "border: 2px solid #d5006d;" } })
+                @Html.ValidationMessageFor(model => model.pagecount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Author Dropdown -->
+        <div class="form-group">
+            @Html.Label("Author", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("authorId", ViewBag.Authors as SelectList, htmlAttributes: new { @class = "form-control", style = "border: 2px solid #d5006d;" })
+                @Html.ValidationMessageFor(model => model.authorId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Book Type Dropdown -->
+        <div class="form-group">
+            @Html.Label("Book Type", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("typeId", ViewBag.BookTypes as SelectList, htmlAttributes: new { @class = "form-control", style = "border: 2px solid #d5006d;" })
+                @Html.ValidationMessageFor(model => model.typeId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" style="background-color: #d5006d; color: white; border: none; margin-top:10px" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "CombinedIndex","Home", null, new { @class = "btn btn-secondary", style = "background-color: #d5006d; color: white; padding: 10px 15px; border: none; text-decoration: none; display: inline-block; margin-top: 10px;" })
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

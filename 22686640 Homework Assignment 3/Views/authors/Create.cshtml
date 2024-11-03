@@ -1,0 +1,52 @@
+﻿@model _22686640_Homework_Assignment_3.Models.author
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2 style="color: #d5006d;">Create Author</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal" style="border: 1px solid #d5006d; padding: 20px; border-radius: 10px; background-color: #ffffff;">
+        <h4 style="color: #d5006d;">Author</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <!-- Name Field -->
+        <div class="form-group">
+            @Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control", style = "border: 2px solid #d5006d;" } })
+                @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Surname Field -->
+        <div class="form-group">
+            @Html.Label("Surname", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.surname, new { htmlAttributes = new { @class = "form-control", style = "border: 2px solid #d5006d;" } })
+                @Html.ValidationMessageFor(model => model.surname, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" style="background-color: #d5006d; color: white; border: none; margin-top:10px" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary", style = "background-color: #d5006d; color: white; padding: 10px 15px; border: none; text-decoration: none; display: inline-block; margin-top: 10px;" })
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

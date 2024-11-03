@@ -1,0 +1,273 @@
+﻿@model _22686640_Homework_Assignment_3.Models.CombinedViewModel
+@using Newtonsoft.Json
+
+@{
+    ViewBag.Title = "Home";
+}
+
+<div class="row">
+    
+        <h3 style="color: #E4007C;">Students</h3>
+        <div>
+            <a href="#" data-url="@Url.Action("Create", "students")" class="create-link btn btn-sm"
+               style="background-color: #FF7EC4; color: white; border-radius: 5px; margin-bottom:10px">Create New Student</a>
+        </div>
+        <table class="table table-bordered"
+               style="border-radius: 10px; overflow: hidden;">
+            <thead style="background-color: #E4007C; color: white;">
+                <tr>
+                    <th>Student Name</th>
+                    <th>Student Surname</th>
+                    <th>Birth Date</th>
+                    <th>Gender</th>
+                    <th>Point</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var student in Model.students)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => student.name)</td>
+                        <td>@Html.DisplayFor(modelItem => student.surname)</td>
+                        <td>@Html.DisplayFor(modelItem => student.birthdate)</td>
+                        <td>@Html.DisplayFor(modelItem => student.gender)</td>
+                        <td>@Html.DisplayFor(modelItem => student.point)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-center">
+            <!-- Pagination for Students Table -->
+            <ul class="pagination pagination-sm">
+                @if (!Model.students.IsFirstPage)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("CombinedIndex", new { studentPage = Model.students.PageNumber - 1, bookPage = Model.books.PageNumber })" style="color: #E4007C;">Prev</a>
+                    </li>
+                 }
+
+                @{
+                    // Display the first page
+                    if (Model.students.PageNumber > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("CombinedIndex", new { studentPage = 1, bookPage = Model.books.PageNumber })" style="color: #E4007C;">1</a>
+                        </li>
+                    }
+
+                    // Display an ellipsis if there are pages before the current range
+                    if (Model.students.PageNumber > 3)
+                    {
+                        <li class="page-item"><span class="page-link">...</span></li>
+                    }
+
+                    // Calculate the range of pages to display
+                    int startPage = Math.Max(2, Model.students.PageNumber - 1);
+                    int endPage = Math.Min(Model.students.PageCount - 1, Model.students.PageNumber + 1);
+
+                    for (int i = startPage; i <= endPage; i++)
+                    {
+                        if (i == Model.students.PageNumber)
+                        {
+                            <li class="page-item active">
+                                <span class="page-link">@i</span>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="@Url.Action("CombinedIndex", new { studentPage = i, bookPage = Model.books.PageNumber })" style="color: #E4007C;">@i</a>
+                            </li>
+                        }
+                    }
+
+                    // Display an ellipsis if there are pages after the current range
+                    if (Model.students.PageNumber < Model.students.PageCount - 2)
+                    {
+                        <li class="page-item"><span class="page-link">...</span></li>
+                    }
+
+                    // Display the last page
+                    if (Model.students.PageNumber < Model.students.PageCount)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("CombinedIndex", new { studentPage = Model.students.PageCount, bookPage = Model.books.PageNumber })" style="color: #E4007C;">@Model.students.PageCount</a>
+                        </li>
+                    }
+                }
+
+                @if (!Model.students.IsLastPage)
+                 {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("CombinedIndex", new { studentPage = Model.students.PageNumber + 1, bookPage = Model.books.PageNumber })" style="color: #E4007C;">Next</a>
+                    </li>
+                 }
+            </ul>
+        </div> 
+
+    <div class="row">
+        <div class="row">
+            <h3 style="color: #E4007C;">Books</h3>
+            <div>
+                <a href="#" data-url="@Url.Action("Create", "books")" class="create-link btn btn-sm"
+                   style="background-color: #FF7EC4; color: white; border-radius: 5px; margin-bottom:10px">Create New Book</a>
+            </div>
+        </div>
+        
+        <table class="table table-bordered"
+               style="border-radius: 10px; overflow: hidden;">
+            <thead style="background-color: #E4007C; color: white;">
+                
+                <tr>
+                    <th>Book Title</th>
+                    <th>Author Name</th>
+                    <th>Author Surname</th>
+                    <th>Type</th>
+                    <th>Page Count</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in Model.books)
+                {
+                    string status = book.borrows.Any(b => b.broughtDate == null) ? "Out" : "Available";
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => book.name)</td>
+                        <td>@Html.DisplayFor(modelItem => book.author.name)</td>
+                        <td>@Html.DisplayFor(modelItem => book.author.surname)</td>
+                        <td>@Html.DisplayFor(modelItem => book.type.name)</td>
+                        <td>@Html.DisplayFor(modelItem => book.pagecount)</td>
+                        <td>@status</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-center">
+            <div>
+                <!-- Pagination for Books Table -->
+                <ul class="pagination pagination-sm">
+                    @if (!Model.books.IsFirstPage)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("CombinedIndex", new { studentPage = Model.students.PageNumber, bookPage = Model.books.PageNumber - 1 })" style="color: #E4007C;">Prev</a>
+                        </li>
+                    }
+
+                    @{
+                        // Display the first page
+                        if (Model.books.PageNumber > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="@Url.Action("CombinedIndex", new { studentPage = Model.students.PageNumber, bookPage = 1 })" style="color: #E4007C;">1</a>
+                            </li>
+                        }
+
+                        // Display an ellipsis if there are pages before the current range
+                        if (Model.books.PageNumber > 3)
+                        {
+                            <li class="page-item"><span class="page-link">...</span></li>
+                        }
+
+                        // Calculate the range of pages to display
+                        int bookstartPage = Math.Max(2, Model.books.PageNumber - 1);
+                        int bookendPage = Math.Min(Model.books.PageCount - 1, Model.books.PageNumber + 1);
+
+                        for (int i = bookstartPage; i <= bookendPage; i++)
+                        {
+                            if (i == Model.books.PageNumber)
+                            {
+                                <li class="page-item active">
+                                    <span class="page-link">@i</span>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" href="@Url.Action("CombinedIndex", new { studentPage = Model.students.PageNumber, bookPage = i })" style="color: #E4007C;">@i</a>
+                                </li>
+                            }
+                        }
+
+                        // Display an ellipsis if there are pages after the current range
+                        if (Model.books.PageNumber < Model.books.PageCount - 2)
+                        {
+                            <li class="page-item"><span class="page-link">...</span></li>
+                        }
+
+                        // Display the last page
+                        if (Model.books.PageNumber < Model.books.PageCount)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="@Url.Action("CombinedIndex", new { studentPage = Model.students.PageNumber, bookPage = Model.books.PageCount })" style="color: #E4007C;">@Model.books.PageCount</a>
+                            </li>
+                        }
+                    }
+
+                    @if (!Model.books.IsLastPage)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("CombinedIndex", new { studentPage = Model.students.PageNumber, bookPage = Model.books.PageNumber + 1 })" style="color: #E4007C;">Next</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="myModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Library</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-content">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            // Function to handle Edit link click event in the Combined View and Details modal
+            $(".edit-link, .edit-link-in-modal").click(function (e) {
+                e.preventDefault();
+                var url = $(this).data("url");
+
+                $.get(url, function (data) {
+                    $("#modal-content").empty();
+                    $("#modal-content").html(data);
+                    $("#myModal").modal("show");
+                });
+            });
+
+            // Function to handle form submission within the modal
+            $("#modal-content").on("submit", "form", function (e) {
+                e.preventDefault();
+                var form = $(this);
+                var url = form.attr("action");
+                var formData = form.serialize();
+
+                $.post(url, formData, function (data) {
+                    $("#myModal").modal("hide");
+                    location.reload();
+                });
+            });
+
+            // Function to handle links (details, delete, create) within the modal
+            $(document).on("click", ".details-link, .delete-link, .create-link", function (e) {
+                e.preventDefault();
+                var url = $(this).data("url");
+
+                $.get(url, function (data) {
+                    $("#modal-content").empty();
+                    $("#modal-content").html(data);
+                    $("#myModal").modal("show");
+                });
+            });
+        });
+    </script>
+}

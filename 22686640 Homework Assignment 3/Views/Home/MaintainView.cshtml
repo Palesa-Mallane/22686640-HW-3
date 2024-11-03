@@ -1,0 +1,395 @@
+﻿@model _22686640_Homework_Assignment_3.Models.CombinedViewModel
+@using Newtonsoft.Json
+@using PagedList.Mvc
+@using PagedList
+
+
+@{
+    ViewBag.Title = "Maintain";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <p>
+            <h3 style="color: #d5006d;">Authors</h3>
+            <a href="#" data-url="@Url.Action("Create", "authors")" class="create-link btn btn-sm"
+               style="background-color: #FF7EC4; color: white; border-radius: 5px;">Create New Author</a>
+        </p>
+        <table class="table table-bordered"
+               style="border-radius: 10px; overflow: hidden;">
+            <thead style="background-color: #E4007C; color: white;">
+                <tr>
+                    <th style="width:20%">Author Name</th>
+                    <th style="width:20%">Author Surname</th>
+                    <th style="width:40%">Books</th>
+                    <th style="width:20%">Maintain</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var author in Model.authors)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => author.name)</td>
+                        <td>@Html.DisplayFor(modelItem => author.surname)</td>
+                        <td>
+                            @if (author.books != null && author.books.Any())
+                            {
+                                foreach (var book in author.books)
+                                {
+                                    @book.name
+                                    if (book != author.books.Last())
+                                    {
+                                        <text>, </text>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <span>No books available</span>
+                            }
+                        </td>
+                        <td>
+                            <a href="#" data-url="@Url.Action("Edit", "authors", new { id = author.authorId })"
+                               class="edit-link btn btn-sm"
+                               style="background-color: #B10060; color: white; border-radius: 5px;">Edit</a>
+                            <a href="#" data-url="@Url.Action("Delete", "authors", new { id = author.authorId })"
+                               class="delete-link btn btn-sm"
+                               style="background-color: #E4007C; color: white; border-radius: 5px;">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div>
+            <!-- Pagination for Authors Table -->
+            
+            <ul class="pagination pagination-sm">
+                @if (!Model.authors.IsFirstPage)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber - 1, typesPage = Model.types.PageNumber, borrowsPage = Model.borrows.PageNumber })" style="color: #E4007C;">Prev</a>
+                    </li>
+                }
+
+                @{
+                    // Display the first page
+                    if (Model.authors.PageNumber > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = 1, typesPage = Model.types.PageNumber, borrowsPage = Model.borrows.PageNumber })"style="color: #E4007C;">1</a>
+                        </li>
+                    }
+
+                    // Display an ellipsis if there are pages before the current range
+                    if (Model.authors.PageNumber > 3)
+                    {
+                        <li class="page-item" style="color: #E4007C;"><span class="page-link">...</span></li>
+                    }
+
+                    // Calculate the range of pages to display
+                    int startPage = Math.Max(2, Model.authors.PageNumber - 1);
+                    int endPage = Math.Min(Model.authors.PageCount - 1, Model.authors.PageNumber + 1);
+
+                    for (int i = startPage; i <= endPage; i++)
+                    {
+                        if (i == Model.authors.PageNumber)
+                        {
+                            <li class="page-item active">
+                                <span class="page-link" style="color: #E4007C;">@i</span>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = i, typesPage = Model.types.PageNumber, borrowsPage = Model.borrows.PageNumber })"style="color: #E4007C;">@i</a>
+                            </li>
+                        }
+                    }
+
+                    // Display an ellipsis if there are pages after the current range
+                    if (Model.authors.PageNumber < Model.authors.PageCount - 2)
+                    {
+                        <li class="page-item"style="color: #E4007C;"><span class="page-link">...</span></li>
+                    }
+
+                    // Display the last page
+                    if (Model.authors.PageNumber < Model.authors.PageCount)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageCount, typesPage = Model.types.PageNumber, borrowsPage = Model.borrows.PageNumber })"style="color: #E4007C;">@Model.authors.PageCount</a>
+                        </li>
+                    }
+                }
+
+                @if (!Model.authors.IsLastPage)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber + 1, typesPage = Model.types.PageNumber, borrowsPage = Model.borrows.PageNumber })"style="color: #E4007C;">Next</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <p>
+            <h3 style="color: #d5006d;">Book Types</h3>
+            <a href="#" data-url="@Url.Action("Create", "types")" class="create-link btn btn-sm"
+               style="background-color: #FF7EC4; color: white; border-radius: 5px;">Create New Type</a>
+        </p>
+        <table class="table table-bordered"
+               style="border-radius: 10px; overflow: hidden; color: #4B0029;">
+            <thead style="background-color: #E4007C; color: white;">
+                <tr>
+                    <th>Book Type</th>
+                    <th>Maintain</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var type in Model.types)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => type.name)</td>
+                        <td>
+                            <a href="#" data-url="@Url.Action("Edit", "types", new { id = type.typeId })"
+                               class="edit-link btn btn-sm"
+                               style="background-color: #B10060; color: white; border-radius: 5px;">Edit</a>
+                            <a href="#" data-url="@Url.Action("Delete", "types", new { id = type.typeId })"
+                               class="delete-link btn btn-sm"
+                               style="background-color: #E4007C; color: white; border-radius: 5px;">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <ul class="pagination pagination-sm">
+            @if (!Model.types.IsFirstPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber, typesPage = Model.types.PageNumber - 1, borrowsPage = Model.borrows.PageNumber })"style="color: #E4007C;">Prev</a>
+                </li>
+            }
+
+            @{
+                // Display the first page
+                if (Model.types.PageNumber > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber, typesPage = 1, borrowsPage = Model.borrows.PageNumber })"style="color: #E4007C;">1</a>
+                    </li>
+                }
+
+                // Display an ellipsis if there are pages before the current range
+                if (Model.types.PageNumber > 3)
+                {
+                    <li class="page-item"><span class="page-link">...</span></li>
+                }
+
+                // Calculate the range of pages to display
+                startPage = Math.Max(2, Model.types.PageNumber - 1);
+                endPage = Math.Min(Model.types.PageCount - 1, Model.types.PageNumber + 1);
+
+                for (int i = startPage; i <= endPage; i++)
+                {
+                    if (i == Model.types.PageNumber)
+                    {
+                        <li class="page-item active">
+                            <span class="page-link">@i</span>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber, typesPage = i, borrowsPage = Model.borrows.PageNumber })"style="color: #E4007C;">@i</a>
+                        </li>
+                    }
+                }
+
+                // Display an ellipsis if there are pages after the current range
+                if (Model.types.PageNumber < Model.types.PageCount - 2)
+                {
+                    <li class="page-item"><span class="page-link">...</span></li>
+                }
+
+                // Display the last page
+                if (Model.types.PageNumber < Model.types.PageCount)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber, typesPage = Model.types.PageCount, borrowsPage = Model.borrows.PageNumber })"style="color: #E4007C;">@Model.types.PageCount</a>
+                    </li>
+                }
+            }
+
+            @if (!Model.types.IsLastPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber, typesPage = Model.types.PageNumber + 1, borrowsPage = Model.borrows.PageNumber })"style="color: #E4007C;">Next</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+<div class="row">
+  
+    <p>
+        <h3 style="color: #d5006d;">Borrowed Books</h3>
+        <a href="#" data-url="@Url.Action("Create", "borrows")" class="create-link btn btn-sm"
+           style="background-color: #FF7EC4; color: white; border-radius: 5px;">Create Borrow</a>
+    </p>
+    <table class="table table-bordered"
+           style="border-radius: 10px; overflow: hidden; color: #4B0029;">
+        <thead style="background-color: #E4007C; color: white;">
+            <tr>
+                <th style="text-align: center; padding: 10px;">Book Name</th>
+                <th style="text-align: center; padding: 10px;">Student Name</th>
+                <th style="text-align: center; padding: 10px;">Student Surname</th>
+                <th style="text-align: center; padding: 10px;">Borrow Date</th>
+                <th style="text-align: center; padding: 10px;">Return Date</th>
+                <th style="text-align: center; padding: 10px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var borrow in Model.borrows) // Assuming Model has a list of borrows
+            {
+                <tr>
+                    <td style="text-align: left; padding: 10px;">@borrow.book.name</td>
+                    <td style="text-align: left; padding: 10px;">@borrow.student.name</td>
+                    <td style="text-align: left; padding: 10px;">@borrow.student.surname</td>
+                    <td style="text-align: left; padding: 10px;">@borrow.takenDate)</td>
+                    <td style="text-align: left; padding: 10px;">@(borrow.broughtDate.HasValue ? borrow.broughtDate.Value.ToString("MM/dd/yyyy") : "Not Returned")</td>
+                    <td>
+                        <a href="#" data-url="@Url.Action("Edit", "borrows", new { id = borrow.borrowId })"
+                           class="edit-link btn btn-sm"
+                           style="background-color: #B10060; color: white; border-radius: 5px;">Edit</a>
+                        <a href="#" data-url="@Url.Action("Delete", "borrows", new { id = borrow.borrowId })"
+                           class="delete-link btn btn-sm"
+                           style="background-color: #E4007C; color: white; border-radius: 5px;">Delete</a>
+                    </td>
+                </tr>
+             }
+        </tbody>
+    </table>
+    <ul class="pagination pagination-sm" style="margin-top: 20px; justify-content: center;">
+        @if (!Model.borrows.IsFirstPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber, typesPage = Model.types.PageNumber, borrowsPage = Model.borrows.PageNumber - 1 })" style="color: #E4007C;">Prev</a>
+            </li>
+        }
+
+        @{
+            // Display the first page
+            if (Model.borrows.PageNumber > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber, typesPage = Model.types.PageNumber, borrowsPage = 1 })" style="color: #E4007C;">1</a>
+                </li>
+            }
+
+            // Display an ellipsis if there are pages before the current range
+            if (Model.borrows.PageNumber > 3)
+            {
+                <li class="page-item"><span class="page-link">...</span></li>
+            }
+
+            // Calculate the range of pages to display
+            startPage = Math.Max(2, Model.borrows.PageNumber - 1);
+            endPage = Math.Min(Model.borrows.PageCount - 1, Model.borrows.PageNumber + 1);
+
+            for (int i = startPage; i <= endPage; i++)
+            {
+                if (i == Model.borrows.PageNumber)
+                {
+                    <li class="page-item active">
+                        <span class="page-link">@i</span>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber, typesPage = Model.types.PageNumber, borrowsPage = i })" style="color: #E4007C;">@i</a>
+                    </li>
+                }
+            }
+
+            // Display an ellipsis if there are pages after the current range
+            if (Model.borrows.PageNumber < Model.borrows.PageCount - 2)
+            {
+                <li class="page-item"><span class="page-link">...</span></li>
+            }
+
+            // Display the last page
+            if (Model.borrows.PageNumber < Model.borrows.PageCount)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber, typesPage = Model.types.PageNumber, borrowsPage = Model.borrows.PageCount })" style="color: #E4007C;">@Model.borrows.PageCount</a>
+                </li>
+            }
+        }
+
+        @if (!Model.borrows.IsLastPage)
+         {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("MaintainView", new { authorPage = Model.authors.PageNumber, typesPage = Model.types.PageNumber, borrowsPage = Model.borrows.PageNumber + 1 })" style="color: #E4007C;">Next</a>
+            </li>
+         }
+    </ul>
+</div>
+
+
+<div id="myModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Maintain</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-content">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(function () {
+            // Function to handle Edit link click event in the Combined View and Details modal
+            $(".edit-link, .edit-link-in-modal").click(function (e) {
+                e.preventDefault();
+                var url = $(this).data("url");
+
+                $.get(url, function (data) {
+                    $("#modal-content").empty();
+                    $("#modal-content").html(data);
+                    $("#myModal").modal("show");
+                });
+            });
+
+            // Function to handle form submission within the modal
+            $("#modal-content").on("submit", "form", function (e) {
+                e.preventDefault();
+                var form = $(this);
+                var url = form.attr("action");
+                var formData = form.serialize();
+
+                $.post(url, formData, function (data) {
+                    $("#myModal").modal("hide");
+                    location.reload();
+                });
+            });
+
+            // Function to handle other links (details, delete, create) within the modal
+            $(".details-link, .delete-link, .create-link, .create-lookup-link").click(function (e) {
+                e.preventDefault();
+                var url = $(this).data("url");
+
+                $.get(url, function (data) {
+                    $("#modal-content").empty();
+                    $("#modal-content").html(data);
+                    $("#myModal").modal("show");
+                });
+            });
+        });
+    </script>
+}

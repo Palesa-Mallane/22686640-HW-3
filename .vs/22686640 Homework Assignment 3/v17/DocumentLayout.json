@@ -1,0 +1,71 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Palesa\\Documents\\2024\\INF272\\22686640 Homework Assignment 3\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{2AE4C3C9-552D-4AA5-9AB8-40F5F69CE866}|22686640 Homework Assignment 3\\22686640 Homework Assignment 3.csproj|C:\\Users\\Palesa\\Documents\\2024\\INF272\\22686640 Homework Assignment 3\\22686640 homework assignment 3\\views\\home\\combinedindex.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2AE4C3C9-552D-4AA5-9AB8-40F5F69CE866}|22686640 Homework Assignment 3\\22686640 Homework Assignment 3.csproj|solutionrelative:22686640 homework assignment 3\\views\\home\\combinedindex.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2AE4C3C9-552D-4AA5-9AB8-40F5F69CE866}|22686640 Homework Assignment 3\\22686640 Homework Assignment 3.csproj|c:\\users\\palesa\\documents\\2024\\inf272\\22686640 homework assignment 3\\22686640 homework assignment 3\\views\\home\\reportview.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2AE4C3C9-552D-4AA5-9AB8-40F5F69CE866}|22686640 Homework Assignment 3\\22686640 Homework Assignment 3.csproj|solutionrelative:22686640 homework assignment 3\\views\\home\\reportview.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2AE4C3C9-552D-4AA5-9AB8-40F5F69CE866}|22686640 Homework Assignment 3\\22686640 Homework Assignment 3.csproj|C:\\Users\\Palesa\\Documents\\2024\\INF272\\22686640 Homework Assignment 3\\22686640 homework assignment 3\\views\\home\\maintainview.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2AE4C3C9-552D-4AA5-9AB8-40F5F69CE866}|22686640 Homework Assignment 3\\22686640 Homework Assignment 3.csproj|solutionrelative:22686640 homework assignment 3\\views\\home\\maintainview.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MaintainView.cshtml",
+              "DocumentMoniker": "C:\\Users\\Palesa\\Documents\\2024\\INF272\\22686640 Homework Assignment 3\\22686640 Homework Assignment 3\\Views\\Home\\MaintainView.cshtml",
+              "RelativeDocumentMoniker": "22686640 Homework Assignment 3\\Views\\Home\\MaintainView.cshtml",
+              "ToolTip": "C:\\Users\\Palesa\\Documents\\2024\\INF272\\22686640 Homework Assignment 3\\22686640 Homework Assignment 3\\Views\\Home\\MaintainView.cshtml",
+              "RelativeToolTip": "22686640 Homework Assignment 3\\Views\\Home\\MaintainView.cshtml",
+              "ViewState": "AQIAAKUAAAAAAAAAAAAAAE8BAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-18T13:40:42.743Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CombinedIndex.cshtml",
+              "DocumentMoniker": "C:\\Users\\Palesa\\Documents\\2024\\INF272\\22686640 Homework Assignment 3\\22686640 Homework Assignment 3\\Views\\Home\\CombinedIndex.cshtml",
+              "RelativeDocumentMoniker": "22686640 Homework Assignment 3\\Views\\Home\\CombinedIndex.cshtml",
+              "ToolTip": "C:\\Users\\Palesa\\Documents\\2024\\INF272\\22686640 Homework Assignment 3\\22686640 Homework Assignment 3\\Views\\Home\\CombinedIndex.cshtml",
+              "RelativeToolTip": "22686640 Homework Assignment 3\\Views\\Home\\CombinedIndex.cshtml",
+              "ViewState": "AQIAAJwAAAAAAAAAAAAAAGkAAAAOAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-18T13:39:54.839Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ReportView.cshtml",
+              "DocumentMoniker": "C:\\Users\\Palesa\\Documents\\2024\\INF272\\22686640 Homework Assignment 3\\22686640 Homework Assignment 3\\Views\\Home\\ReportView.cshtml",
+              "RelativeDocumentMoniker": "22686640 Homework Assignment 3\\Views\\Home\\ReportView.cshtml",
+              "ToolTip": "C:\\Users\\Palesa\\Documents\\2024\\INF272\\22686640 Homework Assignment 3\\22686640 Homework Assignment 3\\Views\\Home\\ReportView.cshtml",
+              "RelativeToolTip": "22686640 Homework Assignment 3\\Views\\Home\\ReportView.cshtml",
+              "ViewState": "AQIAAKMAAAAAAAAAAAAgwLAAAAA3AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-21T15:39:14.081Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
